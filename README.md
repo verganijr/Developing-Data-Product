@@ -1,37 +1,49 @@
-## Welcome to GitHub Pages
+---
+title: "Earthquakes in different countries over seven-day period in 2012"
+author: "Antonio Cesar Vergani Junior"
+date: "April 18, 2017"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+always_allow_html: yes
+---
 
-You can use the [editor on GitHub](https://github.com/verganijr/Developing-Data-Product/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This data source contains data representing seismic events in different countries over a seven-day period in 2012. Earthquake data is collected in real-time by geological institutions worldwide, such as the United States Geological Survey (USGS). You can find further details about the data types on the USGS website.
+The data is found in the URL:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+http://js.cit.datalens.api.here.com/datasets/starter_pack/Earthquakes_7day.csv.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Reading Data
 
-```markdown
-Syntax highlighted code block
+The source data contains 1076 rows: 
 
-# Header 1
-## Header 2
-### Header 3
+```{r, echo=TRUE, results=FALSE}
+if(!require(leaflet)){
+    install.packages("leaflet")
+    library(leaflet)
+}
 
-- Bulleted
-- List
+if(!require(htmltools)){
+    install.packages("htmltools")
+    library(htmltools)
+}
+data <- "http://js.cit.datalens.api.here.com/datasets/starter_pack/Earthquakes_7day.csv"
+df <- read.csv(url(data))
+df <- df[sample(nrow(df),), c(5,6)]
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
+ 
+## Plotting Map
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+The map below shows a clustered view of all the spots where seismic events in different countries over a seven-day period were recorded by geological institutions worldwide in September of 2012: 
 
-### Jekyll Themes
+```{r Leaflet, echo=TRUE}
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/verganijr/Developing-Data-Product/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions(), popup = ~htmlEscape(df$Region))
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+```
