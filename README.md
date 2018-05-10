@@ -14,6 +14,7 @@ The data is found in the URL:
 
 http://js.cit.datalens.api.here.com/datasets/starter_pack/Earthquakes_7day.csv.
 
+This work is also available in https://verganijr.github.io/Developing-Data-Product/index.html
 
 ## Reading Data
 
